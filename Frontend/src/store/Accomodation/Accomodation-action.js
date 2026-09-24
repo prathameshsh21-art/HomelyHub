@@ -49,3 +49,28 @@ export const getAllAccomodation = () => async (dispatch) => {
     throw error;
   }
 };
+
+export const deleteAccomodation = (id) => async (dispatch) => {
+  try {
+    dispatch(accomodationActions.getAccomodationRequest());
+
+    const response = await axiosInstance.delete(
+      `/v1/rent/user/deleteAccommodation/${id}`
+    );
+
+    if (!response) {
+      throw new Error("Could not delete accommodation");
+    }
+
+    dispatch(accomodationActions.deleteAccomodationSuccess(id));
+    return response.data;
+  } catch (error) {
+    dispatch(
+      accomodationActions.getErrors(
+        error.response?.data?.message || error.message
+      )
+    );
+
+    throw error;
+  }
+};

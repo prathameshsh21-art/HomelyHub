@@ -141,9 +141,63 @@ const getUsersProperties = async (req, res) => {
 };
 
 
-export{
-    getProperties,
-    getProperty,
-    createProperty,
-    getUsersProperties
-}
+// DELETE A PROPERTY - an owner deletes his house
+const deleteProperty = async (req, res) => {
+  try {
+    const propertyId = req.params.id;
+    const property = await Property.findById(propertyId);
+
+    if (!property) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Accommodation not found",
+      });
+    }
+
+    // Security check: verify ownership
+    const ownerId = property.userId ? property.userId.toString() : null;
+    const currentUserId = (req.user._id || req.user.id).toString();
+
+    if (!ownerId || ownerId !== currentUserId) {
+      return res.status(403).json({
+        status: "fail",
+        message: "You do not have permission to delete this accommodation",
+      });
+    }
+
+    // If accommodation has ImageKit images, safely attempt deletion from ImageKit
+    if (property.images && Array.isArray(property.images)) {
+      for (const img of property.images) {
+        if (img.public_id) {
+          try {
+            await imagekit.deleteFile(img.public_id);
+          } catch (err) {
+            console.error(`Failed to delete ImageKit file ${img.public_id}:`, err.message);
+          }
+        }
+      }
+    }
+
+    // Delete property document from MongoDB
+    await Property.findByIdAndDelete(propertyId);
+
+    res.status(200).json({
+      status: "success",
+      message: "Accommodation deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting property:", error);
+    res.status(500).json({
+      status: "fail",
+      message: error.message || "Internal server error",
+    });
+  }
+};
+
+export {
+  getProperties,
+  getProperty,
+  createProperty,
+  getUsersProperties,
+  deleteProperty,
+};

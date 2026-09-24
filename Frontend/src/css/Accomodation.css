@@ -241,6 +241,42 @@ section > input::placeholder {
   padding: 1rem;
 }
 
+.myaccomodation-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.delete-accomodation-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-accomodation-btn:hover:enabled {
+  background-color: #b91c1c;
+}
+
+.delete-accomodation-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.delete-accomodation-btn .delete-icon {
+  font-size: 16px;
+  color: white;
+}
+
 .stay-information {
   display: flex;
   align-items: center;

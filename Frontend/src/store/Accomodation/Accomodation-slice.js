@@ -19,6 +19,12 @@ const accomodationSlice = createSlice({
       state.errors = action.payload;
       state.loading = false;
     },
+    deleteAccomodationSuccess(state, action) {
+      state.accomodation = state.accomodation.filter(
+        (item) => item._id !== action.payload
+      );
+      state.loading = false;
+    },
   },
 });
 

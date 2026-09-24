@@ -8,7 +8,7 @@
     "dev": " node src/index.js",
     "seed": "node src/utils/seedData.js",
     "verify": "node src/utils/verifyData.js",
-    "start" : " node src/index.js"
+    "start": " node src/index.js"
   },
   "keywords": [],
   "author": "",
